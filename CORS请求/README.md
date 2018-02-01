@@ -59,7 +59,7 @@ Content-Type: text/html; charset=utf-8
 
 如果可以，同时这一次的预响应也会带有对应的`CORS`响应头
 
-```
+```js
 // cors响应头
 Access-Control-Allow-Methods: GET, POST, PUT
 Access-Control-Allow-Headers: xxx
