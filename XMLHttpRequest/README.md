@@ -8,6 +8,27 @@
 
 ``` javascript
 var xhr = new XMLHttpRequest()
+xhr.open('GET', url)
+xhr.responseType = 'json'
+
+// 比较新的onload事件
+xhr.onload = function() {
+  console.log(xhr.response)
+}
+
+// 比较旧的监听onreadystatechange事件
+xhr.onreadystatechange=function() {
+    if (xhr.readyState==4 && xhr.status==200)
+    {
+        console.log(xhr.responseText)
+    }
+}
+
+xhr.onerror = function() {
+  console.log("Oops, error")
+}
+
+xhr.send()
 ```
 
 创建对象之后，可以通过`xhr`对象上提供的很多接口来进行网络请求。
@@ -58,3 +79,38 @@ var xhr = new XMLHttpRequest()
 > 不过需要注意的是：如果跨域的请求带有`cookies`认证信息的话，`Access-Control-Allow-Origin`就不能设为星号，必须指定明确的、与请求网页一致的域名。不然请求依然会报错。同时，Cookie依然遵循同源政策，只有用服务器域名设置的Cookie才会上传，其他域名的Cookie并不会上传，且（跨源）原网页代码中的`document.cookie`也无法读取服务器域名下的Cookie。
 
 ---
+
+## fetch
+
+```js
+/**
+ * option: object
+ * /
+
+var h = new Headers()
+h.append('Content-Type', 'text/plain')
+ 
+var option = {
+	method: 'GET',
+    headers: h,
+    credentials: 'include'	// 允许接受和发送cookies
+}
+if (fetch) {
+	fetch(url, option)
+    .then((res) => {
+        if (res.ok) {
+			console.log(res)
+        }
+    })
+    .catch((err) => {
+    	console.log(err.message)
+    })
+}
+```
+
+因为返回一个`Promise`对象，所以`fetch`API比较好用
+
+但是需要注意的是：
+
+- 如果遇到网络故障，[`fetch()`](https://developer.mozilla.org/zh-CN/docs/Web/API/GlobalFetch/fetch) promise 将会 reject，带上一个 [`TypeError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError) 对象。但是遇到404等网络响应正常，但服务器不能返回资源或者错误的情况下：想要精确的判断 `fetch()` 是否成功，需要包含 promise resolved 的情况，此时再判断 [`Response.ok`](https://developer.mozilla.org/zh-CN/docs/Web/API/Response/ok) 是不是为 true。
+- 默认情况下, `fetch` **不会从服务端发送或接收任何 cookies**，要发送 cookies，必须设置 [credentials](https://developer.mozilla.org/zh-CN/docs/Web/API/GlobalFetch/fetch#%E5%8F%82%E6%95%B0) 选项，即`fetch(url, {credentials: 'include'})`
