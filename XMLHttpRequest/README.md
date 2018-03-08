@@ -83,10 +83,6 @@ xhr.send()
 ## fetch
 
 ```js
-/**
- * option: object
- * /
-
 var h = new Headers()
 h.append('Content-Type', 'text/plain')
  
@@ -114,3 +110,18 @@ if (fetch) {
 
 - 如果遇到网络故障，[`fetch()`](https://developer.mozilla.org/zh-CN/docs/Web/API/GlobalFetch/fetch) promise 将会 reject，带上一个 [`TypeError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError) 对象。但是遇到404等网络响应正常，但服务器不能返回资源或者错误的情况下：想要精确的判断 `fetch()` 是否成功，需要包含 promise resolved 的情况，此时再判断 [`Response.ok`](https://developer.mozilla.org/zh-CN/docs/Web/API/Response/ok) 是不是为 true。
 - 默认情况下, `fetch` **不会从服务端发送或接收任何 cookies**，要发送 cookies，必须设置 [credentials](https://developer.mozilla.org/zh-CN/docs/Web/API/GlobalFetch/fetch#%E5%8F%82%E6%95%B0) 选项，即`fetch(url, {credentials: 'include'})`
+
+
+
+```js
+// fetch api 
+fetch('some/api/data.json', {
+  method:'POST', //请求类型 GET、POST
+  headers:{}, // 请求的头信息，形式为 Headers 对象或 ByteString
+  body:{}, //请求发送的数据 blob、BufferSource、FormData、URLSearchParams（get 或head 方法中不能包含 body）
+  mode:'', //请求的模式，是否跨域等，如 cors、 no-cors 或 same-origin
+  credentials:'', //cookie 的跨域策略，如 omit、same-origin 或 include
+  cache:'', //请求的 cache 模式: default、no-store、reload、no-cache、 force-cache 或 only-if-cached
+}).then(function(response) { ... })
+```
+
